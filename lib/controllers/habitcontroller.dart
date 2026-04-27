@@ -6,6 +6,7 @@ class HabitController extends GetxController {
   var currentIndex = 0.obs;
   var habits = [].obs;
   var isLoading = false.obs;
+  var streak = 0.obs;
 
   final String baseUrl = 'http://localhost/flutter_application_1/api';
 
@@ -21,12 +22,27 @@ class HabitController extends GetxController {
       final response = await http.get(Uri.parse('$baseUrl/get_habits.php'));
       final data = jsonDecode(response.body);
       if (data['success'] == true) {
-        habits.value = data['habits'];
+        habits.value = List<Map>.from(
+          data['habits'].map(
+            (h) => {
+              'id': int.parse(h['id'].toString()),
+              'name': h['name'].toString(),
+              'done': int.parse(h['done'].toString()),
+            },
+          ),
+        );
+        _updateStreak();
       }
     } catch (e) {
       Get.snackbar('Error', 'Could not load habits');
     } finally {
       isLoading.value = false;
+    }
+  }
+
+  void _updateStreak() {
+    if (completedCount > 0) {
+      streak.value = streak.value + 1;
     }
   }
 
@@ -85,4 +101,9 @@ class HabitController extends GetxController {
   }
 
   int get completedCount => habits.where((h) => h['done'] == 1).length;
+  int get totalCount => habits.length;
+  int get currentStreak => streak.value;
+  double get consistencyRatio =>
+      totalCount == 0 ? 0.0 : completedCount / totalCount;
+  double get powerScore => currentStreak * consistencyRatio;
 }

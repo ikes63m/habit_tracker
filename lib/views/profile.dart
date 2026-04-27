@@ -18,18 +18,21 @@ class _ProfileScreenState extends State<ProfileScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: Colors.grey.shade50,
       appBar: AppBar(
         backgroundColor: primaryColor,
-        title: Text('Profile', style: TextStyle(color: Colors.white)),
+        title: Text(
+          'Profile',
+          style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+        ),
         elevation: 0,
       ),
       body: Obx(() {
-        return Padding(
-          padding: const EdgeInsets.all(15.0),
+        return SingleChildScrollView(
+          padding: const EdgeInsets.all(16),
           child: Column(
             children: [
-              SizedBox(height: 30),
+              SizedBox(height: 20),
               CircleAvatar(
                 radius: 50,
                 backgroundColor: primaryColor.withOpacity(0.15),
@@ -44,12 +47,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   ),
                 ),
               ),
-              SizedBox(height: 15),
+              SizedBox(height: 16),
               Text(
                 loginController.loggedInUsername.value,
                 style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
               ),
-              SizedBox(height: 5),
+              SizedBox(height: 6),
               Text(
                 loginController.loggedInEmail.value,
                 style: TextStyle(color: Colors.grey),
@@ -63,10 +66,21 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   decoration: BoxDecoration(
                     color: Colors.red.shade400,
                     borderRadius: BorderRadius.circular(20),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.red.withOpacity(0.3),
+                        blurRadius: 10,
+                        offset: Offset(0, 4),
+                      ),
+                    ],
                   ),
                   child: Text(
                     'Logout',
-                    style: TextStyle(color: Colors.white, fontSize: 16),
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
                 ),
               ),
